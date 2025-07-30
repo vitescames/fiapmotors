@@ -6,6 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ComprarVeiculoCommand {
-
     private String cliente;
 }

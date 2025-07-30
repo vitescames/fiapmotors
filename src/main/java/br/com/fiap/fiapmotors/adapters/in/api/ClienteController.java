@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ClienteController {
 
-    private CriarClienteUseCasePort criarClienteUseCasePort;
+    private final CriarClienteUseCasePort criarClienteUseCasePort;
 
-    private ClienteMapper clienteMapper;
+    private final ClienteMapper clienteMapper;
 
     @PostMapping
     public ResponseEntity<CriarClienteResponse> criarCliente(@RequestBody CriarClienteRequest criarClienteRequest) {

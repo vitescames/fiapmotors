@@ -43,10 +43,10 @@ public class VeiculoController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<EditarVeiculoResponse> editarVeiculo(@PathVariable Long id, @RequestBody EditarVeiculoRequest editarVeiculoRequest) {
+    public ResponseEntity<EditarVeiculoResponse> editarVeiculo(@PathVariable String id, @RequestBody EditarVeiculoRequest editarVeiculoRequest) {
         EditarVeiculoCommand editarVeiculoCommand = veiculoMapper.toEditarVeiculoCommand(editarVeiculoRequest);
 
-        return ResponseEntity.ok(veiculoMapper.toEditarVeiculoResponse(editarVeiculoUseCasePort.editar(editarVeiculoCommand)));
+        return ResponseEntity.ok(veiculoMapper.toEditarVeiculoResponse(editarVeiculoUseCasePort.editar(id, editarVeiculoCommand)));
     }
 
     @GetMapping

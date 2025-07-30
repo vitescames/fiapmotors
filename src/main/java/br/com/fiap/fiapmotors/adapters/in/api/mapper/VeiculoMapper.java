@@ -10,9 +10,11 @@ import br.com.fiap.fiapmotors.core.command.ComprarVeiculoCommand;
 import br.com.fiap.fiapmotors.core.command.CriarVeiculoCommand;
 import br.com.fiap.fiapmotors.core.command.EditarVeiculoCommand;
 import br.com.fiap.fiapmotors.core.domain.Veiculo;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class VeiculoMapper {
     public CriarVeiculoCommand toCriarVeiculoCommand(CriarVeiculoRequest criarVeiculoRequest) {
         CriarVeiculoCommand criarVeiculoCommand = new CriarVeiculoCommand();
