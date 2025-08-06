@@ -3,6 +3,7 @@ package br.com.fiap.fiapmotors.core.usecase;
 import br.com.fiap.fiapmotors.core.command.CriarClienteCommand;
 import br.com.fiap.fiapmotors.core.domain.Cliente;
 import br.com.fiap.fiapmotors.core.port.in.CriarClienteUseCasePort;
+import br.com.fiap.fiapmotors.core.port.out.ClienteIdentityPort;
 import br.com.fiap.fiapmotors.core.port.out.ClienteRepositoryPort;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 public class CriarClienteUseCase implements CriarClienteUseCasePort {
 
     private final ClienteRepositoryPort clienteRepositoryPort;
+
+    private final ClienteIdentityPort clienteIdentityPort;
 
     @Override
     public Cliente criar(CriarClienteCommand criarClienteCommand) {
@@ -19,6 +22,9 @@ public class CriarClienteUseCase implements CriarClienteUseCasePort {
         cliente.setIdade(criarClienteCommand.getIdade());
         cliente.setNome(criarClienteCommand.getNome());
         cliente.setSexo(criarClienteCommand.getSexo());
+        cliente.setEmail(criarClienteCommand.getEmail());
+
+        cliente.setId(clienteIdentityPort.registrar(criarClienteCommand.getEmail(), criarClienteCommand.getSenha()));
 
         return clienteRepositoryPort.salvar(cliente);
     }

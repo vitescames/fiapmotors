@@ -16,4 +16,6 @@ public class CriarClienteResponse {
     private String sexo;
 
     private String cpf;
+
+    private String email;
 }

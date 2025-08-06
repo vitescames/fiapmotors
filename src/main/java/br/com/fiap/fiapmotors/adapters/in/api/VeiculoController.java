@@ -14,6 +14,7 @@ import br.com.fiap.fiapmotors.core.port.in.ComprarVeiculoUseCasePort;
 import br.com.fiap.fiapmotors.core.port.in.CriarVeiculoUseCasePort;
 import br.com.fiap.fiapmotors.core.port.in.EditarVeiculoUseCasePort;
 import br.com.fiap.fiapmotors.core.port.in.ListarVeiculosUseCasePort;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,8 +58,10 @@ public class VeiculoController {
     }
 
     @PostMapping("/{id}/comprar")
-    public ResponseEntity<Void> comprarVeiculo(@PathVariable String id, @RequestBody ComprarVeiculoRequest comprarVeiculoRequest) {
-        comprarVeiculoUseCasePort.comprar(id, veiculoMapper.toComprarVeiculoCommand(comprarVeiculoRequest));
+    public ResponseEntity<Void> comprarVeiculo(@PathVariable String id, HttpServletRequest request) {
+        String userId = (String) request.getAttribute("userSub");
+
+        comprarVeiculoUseCasePort.comprar(id, userId);
 
         return ResponseEntity.noContent().build();
     }

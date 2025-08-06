@@ -15,6 +15,8 @@ public class ClienteMapper {
         criarClienteCommand.setNome(criarClienteRequest.getNome());
         criarClienteCommand.setSexo(criarClienteRequest.getSexo());
         criarClienteCommand.setIdade(criarClienteRequest.getIdade());
+        criarClienteCommand.setEmail(criarClienteRequest.getEmail());
+        criarClienteCommand.setSenha(criarClienteRequest.getSenha());
 
         return criarClienteCommand;
     }
@@ -27,6 +29,7 @@ public class ClienteMapper {
         criarClienteResponse.setSexo(cliente.getSexo());
         criarClienteResponse.setNome(cliente.getNome());
         criarClienteResponse.setId(cliente.getId());
+        criarClienteResponse.setEmail(cliente.getEmail());
 
         return criarClienteResponse;
     }

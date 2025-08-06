@@ -23,6 +23,8 @@ public class ClienteRepository implements ClienteRepositoryPort {
         clienteEntity.setSexo(cliente.getSexo());
         clienteEntity.setCpf(cliente.getCpf());
         clienteEntity.setIdade(cliente.getIdade());
+        clienteEntity.setEmail(cliente.getEmail());
+        clienteEntity.setId(cliente.getId());
 
         ClienteEntity clienteSalvo = clienteRepositoryJPA.save(clienteEntity);
 
@@ -43,6 +45,7 @@ public class ClienteRepository implements ClienteRepositoryPort {
                     cliente.setCpf(clienteEntity.getCpf());
                     cliente.setIdade(clienteEntity.getIdade());
                     cliente.setId(clienteEntity.getId());
+                    cliente.setEmail(clienteEntity.getEmail());
 
                     return cliente;
                 })

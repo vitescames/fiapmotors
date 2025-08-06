@@ -1,6 +1,5 @@
 package br.com.fiap.fiapmotors.core.usecase;
 
-import br.com.fiap.fiapmotors.core.command.ComprarVeiculoCommand;
 import br.com.fiap.fiapmotors.core.domain.Cliente;
 import br.com.fiap.fiapmotors.core.domain.Veiculo;
 import br.com.fiap.fiapmotors.core.port.in.ComprarVeiculoUseCasePort;
@@ -16,17 +15,17 @@ public class ComprarVeiculoUseCase implements ComprarVeiculoUseCasePort {
     private final ClienteRepositoryPort clienteRepositoryPort;
 
     @Override
-    public void comprar(String id, ComprarVeiculoCommand comprarVeiculoRequest) {
-        Cliente clienteComprador = clienteRepositoryPort.buscarPorId(comprarVeiculoRequest.getCliente());
+    public void comprar(String id, String idUsuario) {
+        Cliente clienteComprador = clienteRepositoryPort.buscarPorId(idUsuario);
 
         if (clienteComprador == null)
-            throw new RuntimeException(String.format("O cliente de ID %s não existe", comprarVeiculoRequest.getCliente()));
+            throw new RuntimeException(String.format("O cliente de ID %s não existe", idUsuario));
 
         Veiculo veiculo = veiculoRepositoryPort.buscarPorId(id);
 
         if (veiculo == null)
             throw new RuntimeException(String.format("O veículo de ID %s não existe", id));
 
-        veiculoRepositoryPort.comprar(id, comprarVeiculoRequest.getCliente());
+        veiculoRepositoryPort.comprar(id, idUsuario);
     }
 }

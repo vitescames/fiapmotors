@@ -14,4 +14,8 @@ public class CriarClienteCommand {
     private String sexo;
 
     private String cpf;
+
+    private String email;
+
+    private String senha;
 }
