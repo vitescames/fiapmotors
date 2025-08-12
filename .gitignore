@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+infra/.terraform.lock.hcl
+infra/.terraform/providers/registry.terraform.io/hashicorp/aws/6.8.0/windows_amd64/LICENSE.txt
+infra/.terraform/providers/registry.terraform.io/hashicorp/aws/6.8.0/windows_amd64/terraform-provider-aws_v6.8.0_x5.exe
+infra/.terraform/terraform.tfstate
