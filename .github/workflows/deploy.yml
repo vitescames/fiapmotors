@@ -6,12 +6,13 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: fiapmotors
+  ECR_REPOSITORY_URI: ${{ vars.ECR_REPOSITORY_URI }}
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -23,18 +24,17 @@ jobs:
           aws-region:            ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        id: ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build & Push image
         run: |
-          REGISTRY="${{ steps.ecr.outputs.registry }}"
-          IMAGE_URI="${REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
-          echo "Pushing to: $IMAGE_URI"
-          docker build -t "$IMAGE_URI" .
-          docker push "$IMAGE_URI"
-          docker tag "$IMAGE_URI" "${REGISTRY}/${ECR_REPOSITORY}:latest"
-          docker push "${REGISTRY}/${ECR_REPOSITORY}:latest"
+          echo "ECR_REPOSITORY_URI=${ECR_REPOSITORY_URI}"
+          echo "IMAGE_TAG=${IMAGE_TAG}"
+          IMAGE_URI="${ECR_REPOSITORY_URI}:${IMAGE_TAG}"
+          docker build -t "${IMAGE_URI}" .
+          docker push "${IMAGE_URI}"
+          docker tag "${IMAGE_URI}" "${ECR_REPOSITORY_URI}:latest"
+          docker push "${ECR_REPOSITORY_URI}:latest"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
