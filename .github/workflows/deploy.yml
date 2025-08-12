@@ -8,6 +8,7 @@ env:
   AWS_REGION: ${{ vars.AWS_REGION }}
   ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
   IMAGE_TAG: ${{ github.sha }}
+  ECR_REGISTRY: ${{ vars.ECR_REGISTRY }}
 
 jobs:
   deploy:
@@ -33,9 +34,10 @@ jobs:
       # Build e push da imagem (Dockerfile na raiz do projeto)
       - name: Build Docker image
         run: |
-          docker build -t app:${IMAGE_TAG} .
-          docker tag app:${IMAGE_TAG} ${ECR_REPOSITORY}:${IMAGE_TAG}
-          docker tag app:${IMAGE_TAG} ${ECR_REPOSITORY}:latest
+          IMAGE_TAG=${{ github.sha }}
+          IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
 
       - name: Push image to ECR
         run: |
