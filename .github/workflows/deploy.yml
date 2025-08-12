@@ -5,46 +5,37 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: ${{ vars.AWS_REGION }}
-  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: fiapmotors
   IMAGE_TAG: ${{ github.sha }}
-  ECR_REGISTRY: ${{ vars.ECR_REGISTRY }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Configura credenciais AWS (usando secrets)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region:            ${{ secrets.AWS_REGION }}
+          aws-region:            ${{ env.AWS_REGION }}
 
-      # Login no ECR
       - name: Login to Amazon ECR
-        id: ecr-login
+        id: ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # Build e push da imagem (Dockerfile na raiz do projeto)
-      - name: Build Docker image
+      - name: Build & Push image
         run: |
-          IMAGE_TAG=${{ github.sha }}
-          IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker build -t $IMAGE_URI .
-          docker push $IMAGE_URI
+          REGISTRY="${{ steps.ecr.outputs.registry }}"
+          IMAGE_URI="${REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
+          echo "Pushing to: $IMAGE_URI"
+          docker build -t "$IMAGE_URI" .
+          docker push "$IMAGE_URI"
+          docker tag "$IMAGE_URI" "${REGISTRY}/${ECR_REPOSITORY}:latest"
+          docker push "${REGISTRY}/${ECR_REPOSITORY}:latest"
 
-      - name: Push image to ECR
-        run: |
-          docker push ${ECR_REPOSITORY}:${IMAGE_TAG}
-          docker push ${ECR_REPOSITORY}:latest
-
-      # Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
@@ -52,8 +43,7 @@ jobs:
         working-directory: infra
         run: terraform init
 
-      # Passamos a tag nova via var; o resto vem do terraform.tfvars
-      - name: Terraform Apply
+      - name: Terraform Apply (image tag = commit SHA)
         working-directory: infra
         env:
           TF_VAR_image_tag: ${{ env.IMAGE_TAG }}
