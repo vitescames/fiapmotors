@@ -18,12 +18,16 @@ public class EditarVeiculoUseCase implements EditarVeiculoUseCasePort {
         if (veiculo == null)
             throw new RuntimeException(String.format("O veículo de ID %s não existe", id));
 
-        veiculo.setAno(editarVeiculoCommand.getAno());
-        veiculo.setCor(editarVeiculoCommand.getCor());
-        veiculo.setMarca(editarVeiculoCommand.getMarca());
-        veiculo.setTipo(editarVeiculoCommand.getTipo());
-        veiculo.setPreco(editarVeiculoCommand.getPreco());
+        setIfNotNull(editarVeiculoCommand.getAno(),   veiculo::setAno);
+        setIfNotNull(editarVeiculoCommand.getCor(),   veiculo::setCor);
+        setIfNotNull(editarVeiculoCommand.getMarca(), veiculo::setMarca);
+        setIfNotNull(editarVeiculoCommand.getTipo(),  veiculo::setTipo);
+        setIfNotNull(editarVeiculoCommand.getPreco(), veiculo::setPreco);
 
         return veiculoRepositoryPort.salvar(veiculo);
+    }
+
+    private static <T> void setIfNotNull(T value, java.util.function.Consumer<T> setter) {
+        if (value != null) setter.accept(value);
     }
 }
