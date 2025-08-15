@@ -3,7 +3,7 @@
 
 Aplicação Java/Spring Boot com **arquitetura hexagonal (ports & adapters)**, **JPA/Hibernate**, **H2 em memória** e integração com **Amazon Cognito** para autenticar **apenas** a rota de compra de veículo.
 
-![img_1.png](img_1.png) teste 
+![img_1.png](img_1.png)
 
 ---
 
